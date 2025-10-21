@@ -118,17 +118,28 @@ button:hover { background: #003A8C; }
   font-weight: 700;
 }
 
+/* ✅ BOTÓN FLOTANTE “SOLICITUDES ACTIVAS” */
 #diagnostico {
   position: fixed;
-  bottom: 12px;
-  right: 12px;
-  background: #eef3ff;
-  color: var(--primary);
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-  display: none;
+  bottom: 20px;
+  right: 20px;
+  background: var(--primary);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  z-index: 1500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+#diagnostico:hover {
+  background: #003A8C;
+  transform: translateY(-2px);
 }
 
 #progressBarContainer {
@@ -150,7 +161,7 @@ button:hover { background: #003A8C; }
   transition: width 0.3s ease;
 }
 
-/* 🔹 NUEVO DISEÑO PARA ID COMPROBANTE Y BOTÓN */
+/* 🔹 ESTILO CAMPOS ID COMPROBANTE Y ADJUNTAR COMPROBANTE */
 .comprobante-container {
   display: flex;
   flex-direction: column;
@@ -207,8 +218,8 @@ a {
 </head>
 <body>
 <header>
-  <h1>💸 REGISTRO DE PAGOS</h1>
-  <p>Formulario de control de recaudos</p>
+  <h1>🧾FORMATO GESTIÓN DE PAGOS</h1>
+  <p>Formulario de control de pagos</p>
 </header>
 
 <div id="customAlert"></div>
@@ -239,8 +250,8 @@ a {
   <input type="text" id="gestorInput" maxlength="15" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
   <select id="gestorSelect" class="hidden">
     <option value=""></option>
-    <option>A&S</option>
-    <option>JJ</option>
+    <option>A&S SOLUCIONES</option>
+    <option>JJ COBRANZAS</option>
     <option>AECSA</option>
   </select>
 
@@ -294,7 +305,6 @@ a {
   <label>FECHA DE PAGO</label>
   <input type="date" id="fechaPago" name="FECHA_DE_PAGO" required>
 
-  <!-- ✅ CAMPOS ACTUALIZADOS -->
   <div class="comprobante-container">
     <label>ID COMPROBANTE</label>
     <div class="comprobante-fields">
