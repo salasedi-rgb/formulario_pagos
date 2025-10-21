@@ -118,30 +118,6 @@ button:hover { background: #003A8C; }
   font-weight: 700;
 }
 
-/* ✅ BOTÓN FLOTANTE “SOLICITUDES ACTIVAS” */
-#diagnostico {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--primary);
-  color: #fff;
-  padding: 12px 18px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 600;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-  z-index: 1500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
-}
-#diagnostico:hover {
-  background: #003A8C;
-  transform: translateY(-2px);
-}
-
 #progressBarContainer {
   width: 100%;
   height: 4px;
@@ -182,8 +158,8 @@ button:hover { background: #003A8C; }
   border-radius: 10px;
   font-size: 15px;
   text-align: center;
-  color: #000; /* Texto negro normal */
-  font-weight: 400; /* Sin negrilla */
+  color: #000;
+  font-weight: 400;
   height: 50px;
   line-height: 50px;
   box-sizing: border-box;
@@ -197,7 +173,7 @@ a {
   height: 50px;
   background: #fff;
   color: #004AAD;
-  border: 1px solid #004AAD; /* Borde delgado */
+  border: 1px solid #004AAD;
   border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
@@ -223,7 +199,6 @@ a {
 </header>
 
 <div id="customAlert"></div>
-<div id="diagnostico">Solicitudes activas: <span id="activos">0</span> | Completadas: <span id="completadas">0</span></div>
 <div id="progressBarContainer"><div id="progressBar"></div></div>
 
 <form id="formulario" method="POST" enctype="multipart/form-data">
@@ -333,21 +308,17 @@ const conceptoContableContainer = document.getElementById('conceptoContableConta
 const progressBarContainer = document.getElementById('progressBarContainer');
 const progressBar = document.getElementById('progressBar');
 
-// ✅ Generar un ID único de 12 caracteres
 function generateUniqueId() {
   return Math.random().toString(36).substr(2, 12).toUpperCase();
 }
 
-// Asignar ID único al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('idComprobante').value = generateUniqueId();
 });
 
-// Formato de número con separadores de miles
 function limpiarNumero(v){return parseFloat(v.replace(/[^\d]/g,''))||0;}
 function formatNumber(n){return n.toLocaleString('es-CO');}
 
-// Formato dinámico en los campos de pago
 ['valorPago','valorSmart'].forEach(id=>{
   const el=document.getElementById(id);
   if(!el) return;
