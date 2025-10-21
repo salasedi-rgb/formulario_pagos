@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Registro de Pagos</title>
+<style>
+:root {
+  --primary: #004AAD;
+  --primary-light: #eaf1ff;
+  --bg: #f8faff;
+  --text: #1f1f1f;
+  --radius: 14px;
+  --success: #28a745;
+  --warning: #FFC107;
+  --error: #DC3545;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  text-align: center;
+  margin-top: 36px;
+}
+header h1 {
+  color: var(--primary);
+  font-size: 26px;
+  margin: 0 0 6px 0;
+}
+header p {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+}
+
+form {
+  background: #fff;
+  width: 90%;
+  max-width: 520px;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  padding: 30px 36px;
+  margin: 22px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeIn .7s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: none;}
+}
+
+label {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 13.5px;
+  margin-bottom: 4px;
+  display: block;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d0d8e4;
+  border-radius: 10px;
+  font-size: 14.5px;
+  background: #fafcff;
+  transition: all .2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+input[readonly] {
+  background: #eef3ff;
+  border-color: #cbd6f1;
+}
+
+.hidden { display: none; }
+
+button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 15px;
+}
+button:hover { background: #003A8C; }
+
+#customAlert {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  background: var(--success);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  z-index: 1200;
+  display: none;
+  font-weight: 700;
+}
+
+#diagnostico {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  background: #eef3ff;
+  color: var(--primary);
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+  display: none;
+}
+
+#progressBarContainer {
+  width: 100%;
+  height: 4px;
+  background: #dce5f8;
+  border-radius: 5px;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  display: none;
+}
+#progressBar {
+  width: 0%;
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+/* 🔹 NUEVO DISEÑO PARA ID COMPROBANTE Y BOTÓN */
+.comprobante-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.comprobante-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#idComprobante {
+  width: 100%;
+  background: #f0f5ff;
+  border: 1px solid #d0d8e4;
+  border-radius: 10px;
+  font-size: 15px;
+  text-align: center;
+  color: #000; /* Texto negro normal */
+  font-weight: 400; /* Sin negrilla */
+  height: 50px;
+  line-height: 50px;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.comprobante-button {
+  height: 50px;
+  background: #fff;
+  color: #004AAD;
+  border: 1px solid #004AAD; /* Borde delgado */
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.comprobante-button:hover {
+  background: #004AAD;
+  color: #fff;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>💸 REGISTRO DE PAGOS</h1>
+  <p>Formulario de control de recaudos</p>
+</header>
+
+<div id="customAlert"></div>
+<div id="diagnostico">Solicitudes activas: <span id="activos">0</span> | Completadas: <span id="completadas">0</span></div>
+<div id="progressBarContainer"><div id="progressBar"></div></div>
+
+<form id="formulario" method="POST" enctype="multipart/form-data">
+  <label>TIPO GESTOR</label>
+  <select id="tipoGestor" name="TIPO_GESTOR" required>
+    <option value=""></option>
+    <option>COFAE</option>
+    <option>CASA DE COBRO</option>
+  </select>
+
+  <label>DOCUMENTO TERCERO</label>
+  <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+
+  <label>DOCUMENTO ESTUDIANTE</label>
+  <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" maxlength="10" required oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+  <label>DOCUMENTO TITULAR</label>
+  <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" maxlength="10" required oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+  <label>CONTRATO</label>
+  <input type="text" id="contrato" name="CONTRATO" minlength="5" maxlength="16" required oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'')">
+
+  <label>GESTOR O CASA DE COBRO</label>
+  <input type="text" id="gestorInput" maxlength="15" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+  <select id="gestorSelect" class="hidden">
+    <option value=""></option>
+    <option>A&S</option>
+    <option>JJ</option>
+    <option>AECSA</option>
+  </select>
+
+  <label>VALOR PAGO</label>
+  <input type="text" id="valorPago" name="VALOR_PAGO" required>
+
+  <div id="valorSmartContainer" class="hidden">
+    <label>VALOR SMART</label>
+    <input type="text" id="valorSmart" name="VALOR_SMART">
+  </div>
+
+  <div id="valorCasaContainer" class="hidden">
+    <label>VALOR CASA DE COBRO</label>
+    <input type="text" id="valorCasa" name="VALOR_CASA_DE_COBRO" readonly placeholder="">
+  </div>
+
+  <div id="conceptoContableContainer" class="hidden">
+    <label>CONCEPTO CONTABLE</label>
+    <select name="CONCEPTO_CONTABLE">
+      <option value=""></option>
+      <option>INGRESO RECIBIDO PARA TERCEROS</option>
+      <option>HONORARIOS</option>
+    </select>
+  </div>
+
+  <label>CONCEPTO DE PAGO</label>
+  <select name="CONCEPTO_DE_PAGO" required>
+    <option value=""></option>
+    <option>CLÁUSULA PENAL</option>
+    <option>CLÁUSULA ESPECIAL</option>
+    <option>DESCUENTO</option>
+    <option>PRONTO PAGO</option>
+    <option>PAGO TOTAL</option>
+    <option>CUOTA MENSUAL</option>
+    <option>CUOTA ACUERDO</option>
+  </select>
+
+  <label>MEDIO DE PAGO</label>
+  <select name="MEDIO_DE_PAGO" required>
+    <option value=""></option>
+    <option>MERCADO PAGO</option>
+    <option>CONSIGNACIÓN</option>
+    <option>VOUCHER</option>
+    <option>ADDI</option>
+    <option>BANCOOMEVA</option>
+    <option>COMULTRASAN</option>
+    <option>FINCOMERCIO</option>
+    <option>BANCO DE BOGOTÁ</option>
+  </select>
+
+  <label>FECHA DE PAGO</label>
+  <input type="date" id="fechaPago" name="FECHA_DE_PAGO" required>
+
+  <!-- ✅ CAMPOS ACTUALIZADOS -->
+  <div class="comprobante-container">
+    <label>ID COMPROBANTE</label>
+    <div class="comprobante-fields">
+      <input type="text" id="idComprobante" name="ID_COMPROBANTE" maxlength="12" required oninput="this.value=this.value.toUpperCase()" readonly>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdL_NkERwwN25hZ5JwScIC3mGV_Wo3oB2lT_v3M5j0JuBe7NA/viewform?usp=header" target="_blank">
+        <button type="button" class="comprobante-button">Adjuntar Comprobante</button>
+      </a>
+    </div>
+  </div>
+
+  <button type="submit" id="submitButton">GUARDAR</button>
+</form>
+
+<script>
+const formulario = document.getElementById('formulario');
+const alertBox = document.getElementById('customAlert');
+const tipoGestor = document.getElementById('tipoGestor');
+const gestorInput = document.getElementById('gestorInput');
+const gestorSelect = document.getElementById('gestorSelect');
+const valorPagoInput = document.getElementById('valorPago');
+const valorSmartInput = document.getElementById('valorSmart');
+const valorCasaInput = document.getElementById('valorCasa');
+const valorSmartContainer = document.getElementById('valorSmartContainer');
+const valorCasaContainer = document.getElementById('valorCasaContainer');
+const conceptoContableContainer = document.getElementById('conceptoContableContainer');
+const progressBarContainer = document.getElementById('progressBarContainer');
+const progressBar = document.getElementById('progressBar');
+
+// ✅ Generar un ID único de 12 caracteres
+function generateUniqueId() {
+  return Math.random().toString(36).substr(2, 12).toUpperCase();
+}
+
+// Asignar ID único al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('idComprobante').value = generateUniqueId();
+});
+
+// Formato de número con separadores de miles
+function limpiarNumero(v){return parseFloat(v.replace(/[^\d]/g,''))||0;}
+function formatNumber(n){return n.toLocaleString('es-CO');}
+
+// Formato dinámico en los campos de pago
+['valorPago','valorSmart'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('input',()=>{
+    let v=el.value.replace(/[^\d]/g,'').slice(0,10);
+    el.value=v?parseInt(v).toLocaleString('es-CO'):'';
+    calcularValorCasa();
+  });
+});
+
+function calcularValorCasa(){
+  const pago=limpiarNumero(valorPagoInput.value||'0');
+  const smart=limpiarNumero(valorSmartInput.value||'0');
+  const esCasa = tipoGestor.value==='CASA DE COBRO';
+  valorCasaInput.value = esCasa && pago>0 ? formatNumber(Math.max(0,pago-smart)) : '';
+}
+
+tipoGestor.addEventListener('change', () => {
+  const esCasa = tipoGestor.value === 'CASA DE COBRO';
+  valorSmartContainer.classList.toggle('hidden', !esCasa);
+  valorCasaContainer.classList.toggle('hidden', !esCasa);
+  conceptoContableContainer.classList.toggle('hidden', !esCasa);
+  gestorInput.classList.toggle('hidden', esCasa);
+  gestorSelect.classList.toggle('hidden', !esCasa);
+  gestorInput.name = esCasa ? '' : 'GESTOR';
+  gestorSelect.name = esCasa ? 'GESTOR' : '';
+  gestorInput.required = !esCasa;
+  gestorSelect.required = esCasa;
+  if(!esCasa) valorCasaInput.value='';
+  calcularValorCasa();
+});
+
+function mostrarAlerta(msg,colorVar){
+  alertBox.textContent=msg;
+  alertBox.style.backgroundColor=colorVar||'#004AAD';
+  alertBox.style.display='block';
+  setTimeout(()=>alertBox.style.display='none',4000);
+}
+
+formulario.addEventListener('submit', async e=>{
+  e.preventDefault();
+  const formData=new FormData(formulario);
+  progressBarContainer.style.display='block';
+  progressBar.style.width='25%';
+  try{
+    const resp=await fetch("https://script.google.com/macros/s/AKfycbwVDWRkqu69t8zvws3oiivd5eFvkpf0uQo2CGZtFG9bZzaPgSc8JcsZoStSAEw6XQ314w/exec",{
+      method:"POST",
+      body: formData
+    });
+    progressBar.style.width='100%';
+    const text=await resp.text();
+    if (text.includes('Error')) {
+      throw new Error(text);
+    } else {
+      mostrarAlerta('✅ '+text,'#28a745');
+      formulario.reset();
+      valorSmartContainer.classList.add('hidden');
+      valorCasaContainer.classList.add('hidden');
+      conceptoContableContainer.classList.add('hidden');
+      gestorSelect.classList.add('hidden');
+      gestorInput.classList.remove('hidden');
+      document.getElementById('idComprobante').value = generateUniqueId();
+    }
+  }catch(err){
+    mostrarAlerta('❌ '+(err.message||'Error desconocido'),'#DC3545');
+  }finally{
+    progressBarContainer.style.display='none';
+    progressBar.style.width='0%';
+  }
+});
+</script>
+</body>
+</html>
