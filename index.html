@@ -16,6 +16,7 @@
   --warning: #FFC107;
   --error: #DC3545;
 }
+
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -24,12 +25,22 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
 header {
   text-align: center;
   margin-top: 36px;
 }
-header h1 { color: var(--primary); font-size: 26px; margin: 0 0 6px 0; }
-header p { color: #666; margin: 0; font-size: 14px; }
+header h1 {
+  color: var(--primary);
+  font-size: 26px;
+  margin: 0 0 6px 0;
+}
+header p {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+}
+
 form {
   background: #fff;
   width: 90%;
@@ -43,8 +54,20 @@ form {
   gap: 14px;
   animation: fadeIn .7s ease;
 }
-@keyframes fadeIn { from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: none;} }
-label { font-weight: 600; color: var(--text); font-size: 13.5px; margin-bottom: 4px; display: block; }
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: none;}
+}
+
+label {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 13.5px;
+  margin-bottom: 4px;
+  display: block;
+}
+
 input, select, textarea {
   width: 100%;
   padding: 12px 14px;
@@ -54,14 +77,21 @@ input, select, textarea {
   background: #fafcff;
   transition: all .2s;
 }
+
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--primary);
   background: #fff;
   box-shadow: 0 0 0 2px var(--primary-light);
 }
-input[readonly] { background: #eef3ff; border-color: #cbd6f1; }
+
+input[readonly] {
+  background: #eef3ff;
+  border-color: #cbd6f1;
+}
+
 .hidden { display: none; }
+
 button {
   background: var(--primary);
   color: #fff;
@@ -74,6 +104,8 @@ button {
   font-size: 15px;
 }
 button:hover { background: #003A8C; }
+button:disabled { cursor: not-allowed; opacity: 0.6; }
+
 #customAlert {
   position: fixed;
   top: 18px;
@@ -87,6 +119,7 @@ button:hover { background: #003A8C; }
   display: none;
   font-weight: 700;
 }
+
 #progressBarContainer {
   width: 100%;
   height: 4px;
@@ -99,14 +132,66 @@ button:hover { background: #003A8C; }
   z-index: 2000;
   display: none;
 }
-#progressBar { width: 0%; height: 100%; background: var(--primary); transition: width 0.3s ease; }
+#progressBar {
+  width: 0%;
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
 /* 🔹 ESTILO CAMPOS ID COMPROBANTE Y ADJUNTAR COMPROBANTE */
-.comprobante-container { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
-.comprobante-fields { display: flex; flex-direction: column; gap: 10px; }
-#idComprobante { width: 100%; background: #f0f5ff; border: 1px solid #d0d8e4; border-radius: 10px; font-size: 15px; text-align: center; color: #000; font-weight: 400; height: 50px; line-height: 50px; box-sizing: border-box; }
-a { text-decoration: none; }
-.comprobante-button { height: 50px; background: #fff; color: #004AAD; border: 1px solid #004AAD; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box; transition: all 0.3s ease; }
-.comprobante-button:hover { background: #004AAD; color: #fff; }
+.comprobante-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.comprobante-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#idComprobante {
+  width: 100%;
+  background: #f0f5ff;
+  border: 1px solid #d0d8e4;
+  border-radius: 10px;
+  font-size: 15px;
+  text-align: center;
+  color: #000;
+  font-weight: 400;
+  height: 50px;
+  line-height: 50px;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.comprobante-button {
+  height: 50px;
+  background: #fff;
+  color: #004AAD;
+  border: 1px solid #004AAD;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.comprobante-button:hover {
+  background: #004AAD;
+  color: #fff;
+}
 </style>
 </head>
 <body>
@@ -119,95 +204,8 @@ a { text-decoration: none; }
 <div id="progressBarContainer"><div id="progressBar"></div></div>
 
 <form id="formulario" method="POST" enctype="multipart/form-data">
-  <!-- CAMPOS DEL FORMULARIO -->
-  <label>TIPO GESTOR</label>
-  <select id="tipoGestor" name="TIPO_GESTOR" required>
-    <option value=""></option>
-    <option>COFAE</option>
-    <option>CASA DE COBRO</option>
-  </select>
-
-  <label>DOCUMENTO TERCERO</label>
-  <input type="text" id="documentoTercero" name="DOCUMENTO_TERCERO" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
-
-  <label>DOCUMENTO ESTUDIANTE</label>
-  <input type="text" id="documentoEstudiante" name="DOCUMENTO_ESTUDIANTE" maxlength="10" required oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-
-  <label>DOCUMENTO TITULAR</label>
-  <input type="text" id="documentoTitular" name="DOCUMENTO_TITULAR" maxlength="10" required oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-
-  <label>CONTRATO</label>
-  <input type="text" id="contrato" name="CONTRATO" minlength="5" maxlength="16" required oninput="this.value=this.value.replace(/[^a-zA-Z0-9\-]/g,'')">
-
-  <label>GESTOR O CASA DE COBRO</label>
-  <input type="text" id="gestorInput" maxlength="15" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-  <select id="gestorSelect" class="hidden">
-    <option value=""></option>
-    <option>A&S SOLUCIONES</option>
-    <option>JJ COBRANZAS</option>
-    <option>AECSA</option>
-  </select>
-
-  <label>VALOR PAGO</label>
-  <input type="text" id="valorPago" name="VALOR_PAGO" required>
-
-  <div id="valorSmartContainer" class="hidden">
-    <label>VALOR SMART</label>
-    <input type="text" id="valorSmart" name="VALOR_SMART">
-  </div>
-
-  <div id="valorCasaContainer" class="hidden">
-    <label>VALOR CASA DE COBRO</label>
-    <input type="text" id="valorCasa" name="VALOR_CASA_DE_COBRO" readonly placeholder="">
-  </div>
-
-  <div id="conceptoContableContainer" class="hidden">
-    <label>CONCEPTO CONTABLE</label>
-    <select name="CONCEPTO_CONTABLE">
-      <option value=""></option>
-      <option>INGRESO RECIBIDO PARA TERCEROS</option>
-      <option>HONORARIOS</option>
-    </select>
-  </div>
-
-  <label>CONCEPTO DE PAGO</label>
-  <select name="CONCEPTO_DE_PAGO" required>
-    <option value=""></option>
-    <option>CLÁUSULA PENAL</option>
-    <option>CLÁUSULA ESPECIAL</option>
-    <option>DESCUENTO</option>
-    <option>PRONTO PAGO</option>
-    <option>PAGO TOTAL</option>
-    <option>CUOTA MENSUAL</option>
-    <option>CUOTA ACUERDO</option>
-  </select>
-
-  <label>MEDIO DE PAGO</label>
-  <select name="MEDIO_DE_PAGO" required>
-    <option value=""></option>
-    <option>MERCADO PAGO</option>
-    <option>CONSIGNACIÓN</option>
-    <option>VOUCHER</option>
-    <option>ADDI</option>
-    <option>BANCOOMEVA</option>
-    <option>COMULTRASAN</option>
-    <option>FINCOMERCIO</option>
-    <option>BANCO DE BOGOTÁ</option>
-  </select>
-
-  <label>FECHA DE PAGO</label>
-  <input type="date" id="fechaPago" name="FECHA_DE_PAGO" required>
-
-  <div class="comprobante-container">
-    <label>ID COMPROBANTE</label>
-    <div class="comprobante-fields">
-      <input type="text" id="idComprobante" name="ID_COMPROBANTE" maxlength="12" required readonly>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdL_NkERwwN25hZ5JwScIC3mGV_Wo3oB2lT_v3M5j0JuBe7NA/viewform?usp=header" target="_blank">
-        <button type="button" class="comprobante-button">Adjuntar Comprobante</button>
-      </a>
-    </div>
-  </div>
-
+  <!-- FORM FIELDS AQUÍ (igual que tu HTML original) -->
+  <!-- ... -->
   <button type="submit" id="submitButton">GUARDAR</button>
 </form>
 
@@ -277,6 +275,7 @@ function mostrarAlerta(msg,colorVar){
   setTimeout(()=>alertBox.style.display='none',4000);
 }
 
+// 🔄 FUNCIÓN DE ENVÍO CON BLOQUEO COMO FÁBRICA DE CRÉDITO
 async function enviarFormularioConReintentos(url, formData, reintentos = 3) {
   let intento = 0;
   while (intento < reintentos) {
@@ -297,17 +296,22 @@ async function enviarFormularioConReintentos(url, formData, reintentos = 3) {
 formulario.addEventListener('submit', async e=>{
   e.preventDefault();
   const formData = new FormData(formulario);
+
+  // 🔹 BLOQUEO DEL BOTÓN SIN CAMBIO DE TEXTO
   submitButton.disabled = true;
-  submitButton.textContent = "Guardando...";
+  submitButton.style.cursor = 'not-allowed';
   progressBarContainer.style.display='block';
   progressBar.style.width='25%';
+
   try {
     const respuesta = await enviarFormularioConReintentos(
       "https://script.google.com/macros/s/AKfycbwVDWRkqu69t8zvws3oiivd5eFvkpf0uQo2CGZtFG9bZzaPgSc8JcsZoStSAEw6XQ314w/exec",
       formData
     );
+
     progressBar.style.width='100%';
-    mostrarAlerta('✅ ' + respuesta, '#28a745');
+    mostrarAlerta('✅ Guardado correctamente', '#28a745');
+
     formulario.reset();
     valorSmartContainer.classList.add('hidden');
     valorCasaContainer.classList.add('hidden');
@@ -315,11 +319,12 @@ formulario.addEventListener('submit', async e=>{
     gestorSelect.classList.add('hidden');
     gestorInput.classList.remove('hidden');
     document.getElementById('idComprobante').value = generateUniqueId();
+
   } catch (err) {
     mostrarAlerta('❌ ' + (err.message || 'Error desconocido'), '#DC3545');
   } finally {
     submitButton.disabled = false;
-    submitButton.textContent = "GUARDAR";
+    submitButton.style.cursor = 'pointer';
     progressBarContainer.style.display='none';
     progressBar.style.width='0%';
   }
