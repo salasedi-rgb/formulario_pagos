@@ -16,7 +16,6 @@
   --warning: #FFC107;
   --error: #DC3545;
 }
-
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -25,22 +24,12 @@ body {
   flex-direction: column;
   align-items: center;
 }
-
 header {
   text-align: center;
   margin-top: 36px;
 }
-header h1 {
-  color: var(--primary);
-  font-size: 26px;
-  margin: 0 0 6px 0;
-}
-header p {
-  color: #666;
-  margin: 0;
-  font-size: 14px;
-}
-
+header h1 { color: var(--primary); font-size: 26px; margin: 0 0 6px 0; }
+header p { color: #666; margin: 0; font-size: 14px; }
 form {
   background: #fff;
   width: 90%;
@@ -54,20 +43,8 @@ form {
   gap: 14px;
   animation: fadeIn .7s ease;
 }
-
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(20px);}
-  to {opacity: 1; transform: none;}
-}
-
-label {
-  font-weight: 600;
-  color: var(--text);
-  font-size: 13.5px;
-  margin-bottom: 4px;
-  display: block;
-}
-
+@keyframes fadeIn { from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: none;} }
+label { font-weight: 600; color: var(--text); font-size: 13.5px; margin-bottom: 4px; display: block; }
 input, select, textarea {
   width: 100%;
   padding: 12px 14px;
@@ -77,21 +54,14 @@ input, select, textarea {
   background: #fafcff;
   transition: all .2s;
 }
-
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--primary);
   background: #fff;
   box-shadow: 0 0 0 2px var(--primary-light);
 }
-
-input[readonly] {
-  background: #eef3ff;
-  border-color: #cbd6f1;
-}
-
+input[readonly] { background: #eef3ff; border-color: #cbd6f1; }
 .hidden { display: none; }
-
 button {
   background: var(--primary);
   color: #fff;
@@ -104,7 +74,6 @@ button {
   font-size: 15px;
 }
 button:hover { background: #003A8C; }
-
 #customAlert {
   position: fixed;
   top: 18px;
@@ -118,7 +87,6 @@ button:hover { background: #003A8C; }
   display: none;
   font-weight: 700;
 }
-
 #progressBarContainer {
   width: 100%;
   height: 4px;
@@ -131,66 +99,14 @@ button:hover { background: #003A8C; }
   z-index: 2000;
   display: none;
 }
-#progressBar {
-  width: 0%;
-  height: 100%;
-  background: var(--primary);
-  transition: width 0.3s ease;
-}
-
+#progressBar { width: 0%; height: 100%; background: var(--primary); transition: width 0.3s ease; }
 /* 🔹 ESTILO CAMPOS ID COMPROBANTE Y ADJUNTAR COMPROBANTE */
-.comprobante-container {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 10px;
-}
-
-.comprobante-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-#idComprobante {
-  width: 100%;
-  background: #f0f5ff;
-  border: 1px solid #d0d8e4;
-  border-radius: 10px;
-  font-size: 15px;
-  text-align: center;
-  color: #000;
-  font-weight: 400;
-  height: 50px;
-  line-height: 50px;
-  box-sizing: border-box;
-}
-
-a {
-  text-decoration: none;
-}
-
-.comprobante-button {
-  height: 50px;
-  background: #fff;
-  color: #004AAD;
-  border: 1px solid #004AAD;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
-}
-
-.comprobante-button:hover {
-  background: #004AAD;
-  color: #fff;
-}
+.comprobante-container { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.comprobante-fields { display: flex; flex-direction: column; gap: 10px; }
+#idComprobante { width: 100%; background: #f0f5ff; border: 1px solid #d0d8e4; border-radius: 10px; font-size: 15px; text-align: center; color: #000; font-weight: 400; height: 50px; line-height: 50px; box-sizing: border-box; }
+a { text-decoration: none; }
+.comprobante-button { height: 50px; background: #fff; color: #004AAD; border: 1px solid #004AAD; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 100%; box-sizing: border-box; transition: all 0.3s ease; }
+.comprobante-button:hover { background: #004AAD; color: #fff; }
 </style>
 </head>
 <body>
@@ -203,6 +119,7 @@ a {
 <div id="progressBarContainer"><div id="progressBar"></div></div>
 
 <form id="formulario" method="POST" enctype="multipart/form-data">
+  <!-- CAMPOS DEL FORMULARIO -->
   <label>TIPO GESTOR</label>
   <select id="tipoGestor" name="TIPO_GESTOR" required>
     <option value=""></option>
@@ -284,7 +201,7 @@ a {
   <div class="comprobante-container">
     <label>ID COMPROBANTE</label>
     <div class="comprobante-fields">
-      <input type="text" id="idComprobante" name="ID_COMPROBANTE" maxlength="12" required oninput="this.value=this.value.toUpperCase()" readonly>
+      <input type="text" id="idComprobante" name="ID_COMPROBANTE" maxlength="12" required readonly>
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSdL_NkERwwN25hZ5JwScIC3mGV_Wo3oB2lT_v3M5j0JuBe7NA/viewform?usp=header" target="_blank">
         <button type="button" class="comprobante-button">Adjuntar Comprobante</button>
       </a>
@@ -360,7 +277,6 @@ function mostrarAlerta(msg,colorVar){
   setTimeout(()=>alertBox.style.display='none',4000);
 }
 
-// 🔄 FUNCIÓN DE ENVÍO CON RETRY
 async function enviarFormularioConReintentos(url, formData, reintentos = 3) {
   let intento = 0;
   while (intento < reintentos) {
@@ -373,7 +289,7 @@ async function enviarFormularioConReintentos(url, formData, reintentos = 3) {
     } catch (err) {
       intento++;
       if (intento >= reintentos) throw err;
-      await new Promise(res => setTimeout(res, 1000 * intento)); // espera exponencial
+      await new Promise(res => setTimeout(res, 1000 * intento));
     }
   }
 }
@@ -381,21 +297,17 @@ async function enviarFormularioConReintentos(url, formData, reintentos = 3) {
 formulario.addEventListener('submit', async e=>{
   e.preventDefault();
   const formData = new FormData(formulario);
-
   submitButton.disabled = true;
   submitButton.textContent = "Guardando...";
   progressBarContainer.style.display='block';
   progressBar.style.width='25%';
-
   try {
     const respuesta = await enviarFormularioConReintentos(
       "https://script.google.com/macros/s/AKfycbwVDWRkqu69t8zvws3oiivd5eFvkpf0uQo2CGZtFG9bZzaPgSc8JcsZoStSAEw6XQ314w/exec",
       formData
     );
-
     progressBar.style.width='100%';
     mostrarAlerta('✅ ' + respuesta, '#28a745');
-
     formulario.reset();
     valorSmartContainer.classList.add('hidden');
     valorCasaContainer.classList.add('hidden');
@@ -403,7 +315,6 @@ formulario.addEventListener('submit', async e=>{
     gestorSelect.classList.add('hidden');
     gestorInput.classList.remove('hidden');
     document.getElementById('idComprobante').value = generateUniqueId();
-
   } catch (err) {
     mostrarAlerta('❌ ' + (err.message || 'Error desconocido'), '#DC3545');
   } finally {
@@ -416,5 +327,4 @@ formulario.addEventListener('submit', async e=>{
 </script>
 </body>
 </html>
-
 
