@@ -62,6 +62,11 @@ input:focus, select:focus, textarea:focus {
 }
 input[readonly] { background: #eef3ff; border-color: #cbd6f1; }
 .hidden { display: none; }
+/* 🔹 SOLO BOTÓN BLOQUEADO */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+}
 button {
   background: var(--primary);
   color: #fff;
@@ -100,12 +105,6 @@ button:hover { background: #003A8C; }
   display: none;
 }
 #progressBar { width: 0%; height: 100%; background: var(--primary); transition: width 0.3s ease; }
-/* Bloqueo total mientras guarda */
-.form-blocked {
-  pointer-events: none;
-  opacity: 0.6;
-  cursor: not-allowed !important;
-}
 /* 🔹 ESTILO CAMPOS ID COMPROBANTE Y ADJUNTAR COMPROBANTE */
 .comprobante-container { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
 .comprobante-fields { display: flex; flex-direction: column; gap: 10px; }
@@ -304,8 +303,8 @@ formulario.addEventListener('submit', async e=>{
   e.preventDefault();
   const formData = new FormData(formulario);
   
-  // BLOQUEAMOS TODO EL FORMULARIO
-  formulario.classList.add('form-blocked');
+  // BLOQUEAR SOLO EL BOTÓN
+  submitButton.disabled = true;
   progressBarContainer.style.display='block';
   progressBar.style.width='25%';
   
@@ -326,8 +325,8 @@ formulario.addEventListener('submit', async e=>{
   } catch (err) {
     mostrarAlerta('❌ ' + (err.message || 'Error desconocido'), '#DC3545');
   } finally {
-    // DESBLOQUEAMOS FORMULARIO
-    formulario.classList.remove('form-blocked');
+    // DESBLOQUEAR EL BOTÓN
+    submitButton.disabled = false;
     progressBarContainer.style.display='none';
     progressBar.style.width='0%';
   }
